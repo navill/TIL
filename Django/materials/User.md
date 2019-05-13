@@ -15,7 +15,7 @@
 
 ```author = models.ForeignKey(settings.AUTH_USER_MODEL, ...)```
 
-- app(user)의 models.py에 CustomModel class를 생성한 후, 이를 settings.py에 ```AUTH_USER_MODEL='users.CustomModel'``` 설정 함으로써 기본적인 구조는 완성된다.
+- app('users')의 models.py에 CustomModel class를 생성한 후, 이를 settings.py에 ```AUTH_USER_MODEL='users.CustomModel'``` 설정 함으로써 기본적인 구조는 완성된다.
 - app마다 사용자 정보를 저장할 필요가 있을 경우 ```ForeignKey``` 또는 ```OneToOneField``` 를 ```settings.AUTH_USER_MODEL``` 로 사용해야한다.
 
 ## get_user_model
@@ -28,4 +28,7 @@
 
   
 
+
 > 위 세 가지는 User 객체를 생성하기 위해 사용되는 기본적인 방법이다. django documents에 구체적으로 이 세 가지의 방식에 대해 명시하지 않고 있지만, 추후에 프로젝트 및 스터디를 진행하면서 차이를 확인하고 정리할 예정이다. (2019/5/14)
+=======
+
