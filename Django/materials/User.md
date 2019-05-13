@@ -15,7 +15,7 @@
 
 ```author = models.ForeignKey(settings.AUTH_USER_MODEL, ...)```
 
-- app(user)의 models.py에 CustomModel class를 생성한 후, 이를 settings.py에 ```AUTH_USER_MODEL='users.CustomModel'``` 설정 함으로써 기본적인 구조는 완성된다.
+- app('users')의 models.py에 CustomModel class를 생성한 후, 이를 settings.py에 ```AUTH_USER_MODEL='users.CustomModel'``` 설정 함으로써 기본적인 구조는 완성된다.
 - app마다 사용자 정보를 저장할 필요가 있을 경우 ```ForeignKey``` 또는 ```OneToOneField``` 를 ```settings.AUTH_USER_MODEL``` 로 사용해야한다.
 
 ## get_user_model
