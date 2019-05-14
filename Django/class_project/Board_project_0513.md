@@ -73,7 +73,7 @@ class Document(models.Model):
 
 - category(ForeginKey:Category)
   -> 게시글의 Key 값으로 Category를 설정함으로써 category 별로 게시글을 분류할 수 있다.
-- author(ForeignKey:[get_user_model]())
+- author(ForeignKey:[get_user_model](https://github.com/navill/TIL/blob/master/Django/materials/User.md))
 - title(CharField)
 - slug(SlugField)
 - text(CharField)
