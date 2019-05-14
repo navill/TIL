@@ -47,9 +47,9 @@ class Category(models.Model):
 > **class Meta** : model 단위로 사용되는 option(not fields). 
 >
 > - 자주 사용되는 옵션
->   odering : 정렬
->   db_table : 데이터베이스 이름
->   verbose_name & verbose_name_plural : 가독성이 향상된 변수의 단복수 이름 
+>   - odering : 정렬
+>   - db_table : 데이터베이스 이름
+>   - verbose_name & verbose_name_plural : 가독성이 향상된 변수의 단복수 이름 
 
 ------
 
