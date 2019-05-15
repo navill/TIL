@@ -128,3 +128,112 @@ Document.objects.prefetch_related('author').all()
 - prefetch_related -> Document와 Category를 불러서 python 코드 단에서 한번에 병합
   - ForeignKey를 포함한 ManyToMany를 지원한다.
 - select_related와 prefetch_related를 사용하지 않을 경우 참조 테이블(foreignkey와 같이 다른 테이블에 묶인 테이블)에 대한 데이터 질의를 항상 실행해야한다. 이는 불필요한 데이터베이스 access를 초래하고 DB에 부하를 주게 된다.
+
+------
+
+### QuerySet Cache
+
+```python
+for doc in Document.objects.all()
+		print(doc.title)
+```
+
+- 전체 쿼리가 실행(평가)되면 캐싱된다.
+
+```object_list = Document.objects.all()``` : query 실행전
+
+```object_list[:4]``` : query 실행
+
+```python
+object_list = Document.objects.all()  # not caching
+for object in object_list:  # 평가가 일어나야 cache된다.
+		print(object.title)		# caching
+		
+object_list[:4]  # -> limit - cache된 데이터를 불러올 수 있다.
+
+# non cache
+object_list = Document.objects.all()
+object_list[4] [x]
+object_list[3] [x]
+# cache
+object_list = Document.objects.all()
+[object.title for object in object_list]
+object_list[4] [o]
+object_list[3] [o]
+
+```
+
+
+
+------
+
+### Exclude
+
+```Document.objects.exlude(title__icontains='1')``` : title에 1이 포함된 document를 제외한다.
+
+- title에 1이 없고, text에 1이 없는 문서 filter
+
+  ```python
+  Document.objects.exclude(title__icontains='1', text__icontains='1')
+  ```
+
+- 제외하고 싶은 category
+
+  ```
+  Document.objects.exclude(category__in=Category.objects.filter(name__icontains='question', ...))
+  ```
+
+> 예) 제외 사항
+>
+> 1. 블로그 제목에 제외 키워드가 있는 경우
+> 2. 블로그 생성일이 한달 이내인 경우
+>
+> ```Document.objects.exclude(blog__in=Blog.objects.filter(title__icontains='key', created_gt=datetime.now() - timedelta(months=1))```
+
+
+
+> 1. QuerySet의 기본 정렬값 : 모델에서 설정
+>
+> ```python
+> Model:
+>   ...
+> 	class Meta:
+> 		ordering = ['field name']
+> ```
+>
+> 2. 기본 정렬값은 pk
+>
+> ```Document.object.all.order_by('title')``` : 오름차순
+>
+> ```Document.object.all.order_by('-title')``` : 내림차순
+>
+> 3. ```Document.objects.get(pk=1).delete()``` : 삭제
+>
+>    ```Document.objects.all().update(title='edition')``` : 갱신
+>    ```Document.objects.filter.(title__icontains='word').update(title='edition')``` : title에 word가 들어간 문서 제목을 edition으로 업데이트
+>
+> [정규표현식](https://regex101.com/)
+
+
+
+------
+
+### [Social login(allauth) - naver](https://django-allauth.readthedocs.io/en/latest/providers.html#naver)
+
+[**App registration (get your key and secret here)**](https://developers.naver.com/appinfo) -> 애플리케이션 등록(API 이용신청)
+
+![image-20190515140729722](/Users/jh/Library/Application Support/typora-user-images/image-20190515140729722.png)
+
+![image-20190515140758517](/Users/jh/Library/Application Support/typora-user-images/image-20190515140758517.png)
+
+![image-20190515140858262](/Users/jh/Library/Application Support/typora-user-images/image-20190515140858262.png)
+
+![image-20190515141024767](/Users/jh/Library/Application Support/typora-user-images/image-20190515141024767.png)
+
+
+
+```from allauth.account.urls import url```
+
+**default URL** : account_login, account_logout,  account_signup
+
+[Development callback URL**](http://localhost:8000/accounts/naver/login/callback/)
