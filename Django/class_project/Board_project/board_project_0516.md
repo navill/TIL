@@ -9,6 +9,7 @@ Todo => board_detail.html : 글 + board_comment.html : 댓글
 
 
 
+
 ```
 update & delete
 페이지에 접근했을 때 구동되는 로직
