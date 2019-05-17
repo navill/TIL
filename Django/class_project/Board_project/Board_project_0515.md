@@ -228,7 +228,7 @@ object_list[3] [o]
 
 ![image-20190515140858262](/Users/jh/Library/Application Support/typora-user-images/image-20190515140858262.png)
 
-![image-20190515141024767](/Users/jh/Library/Application Support/typora-user-images/image-20190515141024767.png)
+![image-20190515141024767](/Users/jh/Desktop/TIL/Django/class_project/Board_project/image-20190515141024767.png)
 
 
 
