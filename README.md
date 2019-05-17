@@ -1,6 +1,8 @@
 # TIL
 Study for back-end programming with django
 
+[Django Documentation](https://docs.djangoproject.com/ko/2.2/)
+
 ### Project
 
 - [Dstagram]()
