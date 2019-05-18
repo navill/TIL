@@ -60,13 +60,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - request 
 
-  ```mermaid
-  graph LR
-  client(client) --> |request| views.py
-  views.py(document_create) --> |request.POST/request.FILES|forms.py
-  forms.py(DocumentForm)
-  
-  ```
+  ![스크린샷 2019-05-18 오후 5.20.51](/Users/jh/Desktop/TIL/Django/class_project/Board_project/detail_information/스크린샷 2019-05-18 오후 5.20.51.png)
 
   - request.method=='POST'
   - requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
@@ -96,21 +90,41 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - 해당 게시글에 댓글 기능
 
-  ```mermaid
-  graph LR
-  client(client) -->|request, document_id|detail(document_detail)
-  client(client) -->|comment| CF(CommentForm)
-  
-  
-  ```
+  ![스크린샷 2019-05-18 오후 5.21.35](/Users/jh/Desktop/TIL/Django/class_project/Board_project/detail_information/스크린샷 2019-05-18 오후 5.21.35.png)
 
   - 댓글 기능을 view에서 처리하지 않고 form에서 처리하기 위해 forms.py에 CommentForm을 구현하였다.
   - detail view는 게시글과 댓글 form을 화면에 출력한다.
   - document 객체, 기존에 작성된 comments, 그리고 댓글 작성을 위한 comment_form이 html에 렌더링 된다.
 
+  ##### forms.CommentForm(forms.ModelForm)
 
+  ```python
+  class CommentForm(forms.ModelForm):
+      class Meta:
+          model = Comment
+          fields = ['text']
+  
+      def __init__(self, *args, **kwargs):
+          super().__init__(*args, **kwargs)
+          self.fields['text'].label = "댓글"
+          self.fields['text'].widget = forms.TextInput()
+          self.fields['text'].widget.attrs = {'class': "form-control", 'placeholder': "댓글을 입력하세요"}
+  ```
 
+  
 
+> widget : HTML 입력 요소를 표현하기 위해 사용된다.
+>
+> - HTML rendering, 위젯과 연관된 GET/POST(context type)의 데이터를 추출할 수 있다.
+>
+> - 위에서 사용된 위젯은 다음과 같이 구성할 수 있다.
+>
+> - ```
+>   self.fields['text'] = forms.CharField(widget=forms.TextInput(attrs={'class: "form-control', 'placeholder': "댓글을 입력하세요"}))
+>   ```
+
+> <참고>
+> Widgets should not be confused with the [form fields](https://docs.djangoproject.com/ko/2.2/ref/forms/fields/). Form fields deal with the logic of input validation and are used directly in templates. Widgets deal with rendering of HTML form input elements on the web page and extraction of raw submitted data. However, widgets do need to be [assigned](https://docs.djangoproject.com/ko/2.2/ref/forms/widgets/#widget-to-field) to form fields.
 
 
 
