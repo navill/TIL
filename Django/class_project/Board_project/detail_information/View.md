@@ -90,7 +90,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - 해당 게시글에 댓글 기능
 
-  ![스크린샷 2019-05-18 오후 5.21.35]([https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷%202019-05-18%20오후%205.21.35.png])
+  ![스크린샷 2019-05-18 오후 5.21.35](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷%202019-05-18%20오후%205.21.35.png)
 
   - 댓글 기능을 view에서 처리하지 않고 form에서 처리하기 위해 forms.py에 CommentForm을 구현하였다.
   - detail view는 게시글과 댓글 form을 화면에 출력한다.
