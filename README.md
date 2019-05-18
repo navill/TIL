@@ -6,7 +6,7 @@ Study for back-end programming with django
 ### Project
 
 - [Dstagram]()
-- [Board](https://github.com/navill/TIL/tree/master/Django/class_project/Board_project)
+- [Board](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/board_project.md)
 - [Bookmark]()
 
 ### Study - Django

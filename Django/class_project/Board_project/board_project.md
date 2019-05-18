@@ -36,6 +36,6 @@
 
 ​	|urls.py
 
-​	|[views.py]()
+​	|[views.py](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/View.md)
 
 ​	
