@@ -6,23 +6,23 @@
 
 ​	|migrations
 
-​		|0001_init.py	
+———>|0001_init.py	
 
 ​	|templates
 
-​		|board
+———>|board
 
-​			|comment_create.html
+————>|comment_create.html
 
-​			|comment_delete.html
+————>|comment_delete.html
 
-​			|document_create.html
+————>|document_create.html
 
-​			|document_detail.html
+————>|document_detail.html
 
-​			|document_list.html
+————>|document_list.html
 
-​			|document_update.html
+————>|document_update.html
 
 ​	|admin.py
 
