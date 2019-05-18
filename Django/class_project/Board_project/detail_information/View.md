@@ -60,7 +60,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - request 
 
-  ![스크린샷 2019-05-18 오후 5.20.51](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷 2019-05-18 오후 5.20.51.png)
+  ![스크린샷 2019-05-18 오후 5.20.51](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷%202019-05-18%20오후%205.20.51.png)
 
   - request.method=='POST'
   - requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
