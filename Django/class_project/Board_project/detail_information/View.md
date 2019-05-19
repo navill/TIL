@@ -63,16 +63,13 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
   ![스크린샷 2019-05-18 오후 5.20.51](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project_image/view/board_project.001.png)
 
   - request.method=='POST'
-  
-- requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
-  
+  - requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
 - 게시물 작성 페이지는 빈 페이지를 보여야하기 때문에, if를 통해 사용자에 의한 POST 전(빈페이지), 후(작성된 정보 전송)로 분기한다.
-  
   - DocumentForm 객체인 form은 document_create 함수의 연산을 마친 후 rendering 된다.
-  
-    ###### 
 
-> **<Form의 네 가지 상태>**
+###### <Form>
+
+> **Form의 네 가지 상태**
 >
 > - **Empty form (unfilled form)**: 비어있는 초기 form 형태(unbound)
 > - **Filled form**: 사용자가 form에 데이터를 입력한 상태(bound)
@@ -130,7 +127,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 > widget : HTML 입력 요소를 표현하기 위해 사용된다.
 >
 > - HTML rendering, 위젯과 연관된 GET/POST(context type)의 데이터를 추출할 수 있다.
-> - forms.CommentForm에서 사용된 위젯은 위와 같이 구성할 수 있다.
+> - forms.CommentForm에서 사용된 위젯은 다음과 같이 구성할 수 있다.
 >
 > ```self.fields['text'] = forms.CharField(widget=forms.TextInput(attrs={'class: "form-control', 'placeholder': "댓글을 입력하세요"}))```
 
