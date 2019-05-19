@@ -64,10 +64,19 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
   - request.method=='POST'
   - requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
-
-  - 게시물 작성 페이지는 빈 페이지를 보여야하기 때문에, if를 통해 사용자에 의한 POST 전(빈페이지), 후(작성된 정보 전송)로 분기한다.
-
+- 게시물 작성 페이지는 빈 페이지를 보여야하기 때문에, if를 통해 사용자에 의한 POST 전(빈페이지), 후(작성된 정보 전송)로 분기한다.
   - DocumentForm 객체인 form은 document_create 함수의 연산을 마친 후 rendering 된다.
+
+> **<Form의 네 가지 상태>**
+>
+> - **Empty form (unfilled form)**: 비어있는 초기 form 형태(unbound)
+> - **Filled form**: 사용자가 form에 데이터를 입력한 상태(bound)
+>   - Form.is_bound -> boolean 을 통해 확인할 수 있다.
+> - **Submitted form with errors**: form에 데이터를 입력하였지만 올바르지 않은 접근 또는 입력(invalid)
+> - **Submitted form without errors**: form에 올바른 접근과 유효한 데이터를 입력(valid)
+>   - Form.is_valid -> boolean 을 통해 확인할 수 있다.
+>
+> **form은 is_bound와 is_valid에 의해 form의 작동 여부를 판단 할 수 있으며, 이를 통해 기능을 분기 할 수 있다.**
 
 ------
 
@@ -152,6 +161,8 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
   if 분기를 통해 is_valid가 False일 경우 기존의 document로 redirect 된다.
   
 - 모든 과정이 완료되면 게시글, 빈 댓글 입력창, 새로 작성하여 db에 저장된 댓글을 포함한 댓글 리스트가 화면에 출력된다.
+
+> 구조 설계 시, 기능 및 구조를 고려하여 여러 view(document_detail, comment_create)에서 데이터를 가공한 후 하나의 template(document_detail)에 전달 할 수 있다.
 
 ------
 
