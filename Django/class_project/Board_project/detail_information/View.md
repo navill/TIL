@@ -156,7 +156,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - request.POST(입력 버튼 클릭 시 발생한 Post)에는 작성자 및 작성 내용을 포함한다.
   
-- 이러한 정보는 댓글 입력이 완료되었을 때, CommentForm의 객체에 전달되고 유효성 검사(is_valid) 후 save함수를 통해 db에 저장된다. 
+- 이러한 정보는 댓글 입력이 완료되었을 때, CommentForm의 객체에 전달되고 유효성 검사([is_valid](#form)) 후 save함수를 통해 db에 저장된다. 
   if 분기를 통해 is_valid가 False일 경우 기존의 document로 redirect 된다.
   
 - 모든 과정이 완료되면 게시글, 빈 댓글 입력창, 새로 작성하여 db에 저장된 댓글을 포함한 댓글 리스트가 화면에 출력된다.
