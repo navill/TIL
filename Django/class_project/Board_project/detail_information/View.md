@@ -130,12 +130,9 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 > widget : HTML 입력 요소를 표현하기 위해 사용된다.
 >
 > - HTML rendering, 위젯과 연관된 GET/POST(context type)의 데이터를 추출할 수 있다.
+> - forms.CommentForm에서 사용된 위젯은 위와 같이 구성할 수 있다.
 >
-> - ```python
->  self.fields['text'] = forms.CharField(widget=forms.TextInput(attrs={'class: "form-control', 'placeholder': "댓글을 입력하세요"}))
->  ```
->  
->  - forms.CommentForm에서 사용된 위젯은 위와 같이 구성할 수 있다.
+> ```self.fields['text'] = forms.CharField(widget=forms.TextInput(attrs={'class: "form-control', 'placeholder': "댓글을 입력하세요"}))```
 
 > <참고>
 > Widgets should not be confused with the [form fields](https://docs.djangoproject.com/ko/2.2/ref/forms/fields/). Form fields deal with the logic of input validation and are used directly in templates. Widgets deal with rendering of HTML form input elements on the web page and extraction of raw submitted data. However, widgets do need to be [assigned](https://docs.djangoproject.com/ko/2.2/ref/forms/widgets/#widget-to-field) to form fields.
