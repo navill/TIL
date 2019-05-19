@@ -67,7 +67,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 - 게시물 작성 페이지는 빈 페이지를 보여야하기 때문에, if를 통해 사용자에 의한 POST 전(빈페이지), 후(작성된 정보 전송)로 분기한다.
   - DocumentForm 객체인 form은 document_create 함수의 연산을 마친 후 rendering 된다.
 
-###### <Form>
+###### Form
 
 > **Form의 네 가지 상태**
 >
