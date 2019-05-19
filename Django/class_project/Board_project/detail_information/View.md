@@ -148,7 +148,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 **<주요 기능>**
 
-- 게시글 하단에 기존에 생성된 댓글 리스트 출력
+- 댓글 입력 처리 및 DB 저장
 
   ![board_project.001](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project_image/view/board_project.003.jpeg)
 
