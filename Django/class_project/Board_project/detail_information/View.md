@@ -60,7 +60,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - request 
 
-  ![스크린샷 2019-05-18 오후 5.20.51](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷%202019-05-18%20오후%205.20.51.png)
+  ![스크린샷 2019-05-18 오후 5.20.51](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project_image/view/board_project.001.png)
 
   - request.method=='POST'
   - requset.FILES(이미지 파일)는 사용자가 server로 보낸 request에 포함되어있다. 이를 DocumentForm의 초기화값으로 인가한 후 객체를 생성한다.
@@ -90,7 +90,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - 해당 게시글에 댓글 기능
 
-  ![스크린샷 2019-05-18 오후 5.21.35](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/스크린샷%202019-05-18%20오후%205.21.35.png)
+  ![스크린샷 2019-05-18 오후 5.21.35](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project_image/view/board_project.002.png)
 
   - 댓글 기능을 view에서 처리하지 않고 form에서 처리하기 위해 forms.py에 CommentForm을 구현하였다.
   - document_detail view는 게시글과 댓글 form을 화면에 출력한다.
@@ -122,9 +122,6 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 > - ```python
 >  self.fields['text'] = forms.CharField(widget=forms.TextInput(attrs={'class: "form-control', 'placeholder': "댓글을 입력하세요"}))
 >  ```
->  ```
-> 
->  ```
 
 > <참고>
 > Widgets should not be confused with the [form fields](https://docs.djangoproject.com/ko/2.2/ref/forms/fields/). Form fields deal with the logic of input validation and are used directly in templates. Widgets deal with rendering of HTML form input elements on the web page and extraction of raw submitted data. However, widgets do need to be [assigned](https://docs.djangoproject.com/ko/2.2/ref/forms/widgets/#widget-to-field) to form fields.
@@ -145,7 +142,7 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - 게시글 하단에 기존에 생성된 댓글 리스트 출력
 
-  ![board_project.001](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project/board_project.001.jpeg)
+  ![board_project.001](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/detail_information/board_project_image/view/board_project.003.jpeg)
 
 - document_detail.html은 화면에 보여질 게시글(Document-document), form에 구성된 댓글 입력 창(CommentForm-[comment_form](#formscommentformformsmodelform)), 기존에 입력된 댓글 리스트(document.comments.all)로부터 데이터를 전달받는다.
 
