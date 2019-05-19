@@ -146,8 +146,10 @@ a = Q(title__icontains=search_key) | temp_q = Q(author__icontains=search_key)
 
 - document_detail.html은 화면에 보여질 게시글(Document-document), form에 구성된 댓글 입력 창(CommentForm-[comment_form](#formscommentformformsmodelform)), 기존에 입력된 댓글 리스트(document.comments.all)로부터 데이터를 전달받는다.
 
-- request.POST(입력 버튼 클릭 시 발생한 Post)에는 작성자 및 작성 내용을 포함하며, 댓글 입력 시 CommentForm의 객체에 전달되고 유효성 검사(is_valid) 후 save함수를 통해 db에 저장된다. 
-  if 분기를 통해 is_valid가 False일 경우 기존의 documet로 redirect 된다.
+- request.POST(입력 버튼 클릭 시 발생한 Post)에는 작성자 및 작성 내용을 포함한다.
+  
+- 이러한 정보는 댓글 입력이 완료되었을 때, CommentForm의 객체에 전달되고 유효성 검사(is_valid) 후 save함수를 통해 db에 저장된다. 
+  if 분기를 통해 is_valid가 False일 경우 기존의 document로 redirect 된다.
   
 - 모든 과정이 완료되면 게시글, 빈 댓글 입력창, 새로 작성하여 db에 저장된 댓글을 포함한 댓글 리스트가 화면에 출력된다.
 
