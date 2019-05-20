@@ -12,8 +12,8 @@ Study for back-end programming with django
 ### Study
 
 - [Django and AWS](https://github.com/navill/TIL/blob/master/Study/Django_with_AWS/Djang_with_AWS_Diagram.jpg)(지속적으로 내용 추가할 예정)
-- Upload Images
-- User
+- [Upload Images](https://github.com/navill/TIL/blob/master/Study/Upload_Image.md)
+- [User](https://github.com/navill/TIL/blob/master/Study/User.md)
 
 ### Django
 
