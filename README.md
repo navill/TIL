@@ -5,18 +5,22 @@ Study for back-end programming with django
 
 ### Project
 
-- [Dstagram]()
+- Dstagram
 - [Board](https://github.com/navill/TIL/blob/master/Django/class_project/Board_project/board_project.md)
-- [Bookmark]()
+- Bookmark
 
-### Study - Django
+### Study
+
+- [Django and AWS]()(지속적으로 내용 추가할 예정)
+
+### Django
 
 - Model
 - Form
 - View
 - Template
 
-### Study - Python
+### Python
 
 - 
 
