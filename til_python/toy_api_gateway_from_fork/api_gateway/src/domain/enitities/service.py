@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class Service:
     name: str
     internal_url: str
-    slag: str
+    slug: str
