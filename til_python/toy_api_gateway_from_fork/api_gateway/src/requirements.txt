@@ -1,0 +1,9 @@
+aiohttp==3.10.5
+coverage==7.6.1
+fastapi[standard]==0.114.1
+httptools==0.6.1
+pydantic-settings==2.5.1
+pytest-asyncio==0.24.0
+pytest==8.3.3
+python-jose[cryptography]==3.3.0
+types-python-jose==3.3.4.20240106
