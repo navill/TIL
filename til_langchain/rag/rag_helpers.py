@@ -110,20 +110,20 @@ async def retrieve(retriever: VectorStoreRetriever, query: str) -> list[Document
     return await retriever.ainvoke(input=query)
 
 
-async def test_search(query: str):
+async def test_search(query: str) -> list[Document]:
     history_docs: list[Document] = await get_text_docs("data/history.txt")
     vector_store = await get_vectorstore(history_docs, embeddings_model)
     return await search(vector_store, query)
 
 
-async def test_retrieve(query: str):
+async def test_retrieve(query: str) -> list[Document]:
     history_docs: list[Document] = await get_text_docs("data/history.txt")
     vectorstore = await get_vectorstore(history_docs, embeddings_model)
     retriever = get_retriever(vectorstore, k=1)
     return await retrieve(retriever, query)
 
 
-async def test_chain(query: str):
+async def test_chain(query: str) -> str:
     def format_docs(docs):
         """검색된 문서를 하나의 문자열로 포맷팅"""
         return "\n\n".join(doc.page_content for doc in docs)
