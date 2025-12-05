@@ -413,3 +413,5 @@ modules.xml
 *.ipr
 uv.lock
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,django,pycharm+all,pycharm+iml,dotenv,jupyternotebooks
+
+*temp*
