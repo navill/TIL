@@ -336,7 +336,7 @@ def get_connections_via_lsof(pid: int) -> List[Dict]:
 def display_connections(proc: psutil.Process, buf: ScreenBuffer, no_color: bool = False) -> Optional[Dict]:
     """TCP 연결 정보 출력"""
     pid = proc.pid
-    use_lsof = False
+    use_lsof = True
     connections = get_connections_via_lsof(pid)
 
     if not connections:
