@@ -1,12 +1,14 @@
 import os
 from datetime import datetime, timezone, timedelta
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, Depends
 from fastapi.security import HTTPBearer
 from pydantic import BaseModel, EmailStr, Field
 from jose import jwt
 import aiohttp
 
+load_dotenv()
 
 app = FastAPI(title="Service A", version="0.1.0", docs_url=None, redoc_url=None)
 
