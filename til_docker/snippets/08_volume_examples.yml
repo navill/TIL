@@ -1,0 +1,173 @@
+# ============================================
+# Docker 볼륨 설정 예제
+# Named Volume, Bind Mount, tmpfs
+# ============================================
+
+version: '3.8'
+
+
+# ============================================
+# Named Volume (Docker 관리 영속 볼륨)
+# ============================================
+services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backup:/backup
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+    driver: local
+  postgres_backup:
+    driver: local
+  redis_data:
+    driver: local
+
+
+# ============================================
+# Bind Mount (개발 환경 - 코드 핫 리로드)
+# ============================================
+# services:
+#   web:
+#     build: .
+#     volumes:
+#       - ./app:/app:cached          # 코드 핫 리로드 (읽기 성능 우선)
+#       - ./config:/config:ro        # 설정 파일 (읽기 전용)
+#       - /app/.venv                 # 가상환경 제외 (컨테이너 내 유지)
+
+# 마운트 옵션:
+# cached    : 호스트 → 컨테이너 (읽기 성능 우선)
+# delegated : 컨테이너 → 호스트 (쓰기 성능 우선)
+# ro        : 읽기 전용
+# rw        : 읽기/쓰기 (기본값)
+
+
+# ============================================
+# tmpfs Mount (메모리 기반 임시 저장소)
+# ============================================
+# services:
+#   web:
+#     image: nginx
+#     tmpfs:
+#       - /tmp:size=100M
+#       - /run:size=50M,mode=1777
+#
+#   cache:
+#     image: redis
+#     tmpfs:
+#       - /data:size=2G            # 메모리 기반 (최고 성능)
+
+
+# ============================================
+# 데이터베이스 볼륨 영속화
+# ============================================
+# services:
+#   postgres:
+#     image: postgres:15-alpine
+#     environment:
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data    # 데이터 영속화
+#       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro  # 초기화 스크립트
+#       - ./backups:/backups                        # 백업 디렉토리
+#
+#   mysql:
+#     image: mysql:8
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#       - ./my.cnf:/etc/mysql/conf.d/my.cnf:ro
+#
+# volumes:
+#   postgres_data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: /data/postgres     # 특정 호스트 경로에 저장
+#       o: bind
+#   mysql_data:
+
+
+# ============================================
+# 볼륨 공유 (컨테이너 간)
+# ============================================
+# services:
+#   app:
+#     image: myapp
+#     volumes:
+#       - shared_data:/data
+#
+#   worker:
+#     image: myworker
+#     volumes:
+#       - shared_data:/data
+#
+#   backup:
+#     image: backup-tool
+#     volumes:
+#       - shared_data:/data:ro      # 읽기 전용
+#
+# volumes:
+#   shared_data:
+
+
+# ============================================
+# NFS 볼륨 (멀티 호스트)
+# ============================================
+# services:
+#   web:
+#     image: nginx
+#     volumes:
+#       - nfs_data:/usr/share/nginx/html
+#
+# volumes:
+#   nfs_data:
+#     driver: local
+#     driver_opts:
+#       type: nfs
+#       o: addr=192.168.1.100,rw
+#       device: ":/export/data"
+
+
+# ============================================
+# CLI 볼륨 명령어 참조
+# ============================================
+# docker volume create mydata          # 볼륨 생성
+# docker volume ls                     # 볼륨 목록
+# docker volume inspect mydata         # 상세 정보
+# docker volume rm mydata              # 삭제
+# docker volume prune                  # 사용하지 않는 볼륨 정리
+#
+# docker run -v mydata:/data postgres  # Named Volume으로 실행
+# docker run -v $(pwd):/app myapp      # Bind Mount로 실행
+# docker run -v /host/config:/etc/config:ro nginx  # 읽기 전용 마운트
+
+
+# ============================================
+# 볼륨 백업/복구 명령어
+# ============================================
+# 백업:
+# docker run --rm \
+#   -v mydata:/data \
+#   -v $(pwd):/backup \
+#   alpine \
+#   tar czf /backup/backup-$(date +%Y%m%d).tar.gz -C /data .
+#
+# 복구:
+# docker run --rm \
+#   -v mydata:/data \
+#   -v $(pwd):/backup \
+#   alpine \
+#   sh -c "cd /data && tar xzf /backup/backup-20250112.tar.gz"
+#
+# 복제:
+# docker run --rm \
+#   -v source_volume:/from \
+#   -v target_volume:/to \
+#   alpine \
+#   sh -c "cp -av /from/. /to/"

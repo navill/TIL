@@ -1,0 +1,207 @@
+# ============================================
+# Docker 네트워크 설정 예제
+# 네트워크 격리, 서비스 디스커버리, 보안 계층 분리
+# ============================================
+
+version: '3.8'
+
+
+# ============================================
+# 기본 네트워크 설정 (Bridge)
+# ============================================
+services:
+  web:
+    image: nginx
+    networks:
+      - frontend
+      - backend
+
+  api:
+    image: myapi
+    networks:
+      - backend
+
+  db:
+    image: postgres
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true       # 외부 접근 차단
+
+
+# ============================================
+# 마이크로서비스 네트워크 분리
+# ============================================
+# services:
+#   # 프론트엔드 (공개)
+#   frontend:
+#     image: frontend
+#     networks:
+#       - public
+#
+#   # API 게이트웨이 (공개 + 내부)
+#   api-gateway:
+#     image: api-gateway
+#     networks:
+#       - public
+#       - internal
+#
+#   # 비즈니스 서비스 (내부만)
+#   auth-service:
+#     image: auth-service
+#     networks:
+#       - internal
+#
+#   user-service:
+#     image: user-service
+#     networks:
+#       - internal
+#
+#   # 데이터베이스 (격리)
+#   db:
+#     image: postgres
+#     networks:
+#       - database
+#
+# networks:
+#   public:
+#     driver: bridge
+#   internal:
+#     driver: bridge
+#     internal: true      # 외부 접근 차단
+#   database:
+#     driver: bridge
+#     internal: true
+
+
+# ============================================
+# 보안 계층 분리 (DMZ, App, Data)
+# ============================================
+# services:
+#   # DMZ (인터넷 접근)
+#   nginx:
+#     image: nginx
+#     networks:
+#       - dmz
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#
+#   # 애플리케이션 계층
+#   web:
+#     image: myapp
+#     networks:
+#       - dmz
+#       - app-tier
+#
+#   api:
+#     image: myapi
+#     networks:
+#       - app-tier
+#       - data-tier
+#
+#   # 데이터 계층 (완전 격리)
+#   db:
+#     image: postgres
+#     networks:
+#       - data-tier
+#
+#   redis:
+#     image: redis
+#     networks:
+#       - data-tier
+#
+# networks:
+#   dmz:
+#     driver: bridge
+#   app-tier:
+#     driver: bridge
+#     internal: true
+#   data-tier:
+#     driver: bridge
+#     internal: true
+
+
+# ============================================
+# 네트워크 별칭 (Alias) 설정
+# ============================================
+# services:
+#   web:
+#     image: nginx
+#     networks:
+#       backend:
+#         aliases:
+#           - webserver
+#           - frontend
+#
+#   api:
+#     image: myapi
+#     networks:
+#       - backend
+#
+# networks:
+#   backend:
+
+
+# ============================================
+# Host 네트워크 (고성능 필요 시)
+# ============================================
+# services:
+#   prometheus:
+#     image: prom/prometheus
+#     network_mode: host
+#     # 포트 매핑 불필요 - 호스트 포트 직접 사용
+
+
+# ============================================
+# Overlay 네트워크 (Docker Swarm 멀티 호스트)
+# ============================================
+# services:
+#   web:
+#     image: nginx
+#     networks:
+#       - webnet
+#     deploy:
+#       replicas: 3
+#
+# networks:
+#   webnet:
+#     driver: overlay
+#     attachable: true
+
+
+# ============================================
+# 포트 노출 설정
+# ============================================
+# services:
+#   web:
+#     image: nginx
+#     ports:
+#       - "80:80"                    # 모든 인터페이스
+#       - "443:443"
+#       - "127.0.0.1:8080:8080"     # 로컬만 접근 가능
+#
+#   api:
+#     image: myapi
+#     expose:
+#       - "3000"                     # 컨테이너 간 통신만 (외부 노출 안 함)
+#
+#   admin:
+#     image: admin-panel
+#     ports:
+#       - "192.168.1.100:9000:9000"  # 특정 IP만 바인딩
+
+
+# ============================================
+# CLI 네트워크 명령어 참조
+# ============================================
+# docker network ls                              # 네트워크 목록
+# docker network create mynetwork                # 네트워크 생성
+# docker network inspect mynetwork               # 상세 정보
+# docker network rm mynetwork                    # 삭제
+# docker run --network mynetwork --name web nginx  # 네트워크에 연결하여 실행
