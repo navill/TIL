@@ -1,0 +1,172 @@
+# ============================================
+# GitHub Actions CI/CD 워크플로우 템플릿
+# 멀티 아키텍처 빌드, ECR 푸시, 캐시 최적화
+# ============================================
+
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: myregistry.com
+  IMAGE_NAME: myapp
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # ------------------------------
+      # 1. 체크아웃
+      # ------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ------------------------------
+      # 2. QEMU 설정 (멀티 아키텍처 지원)
+      # ------------------------------
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # ------------------------------
+      # 3. Docker Buildx 설정
+      # ------------------------------
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ------------------------------
+      # 4. 레지스트리 로그인
+      # ------------------------------
+      - name: Login to Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      # ------------------------------
+      # 5. 메타데이터 추출 (태그, 라벨)
+      # ------------------------------
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=sha,prefix={{branch}}-
+
+      # ------------------------------
+      # 6. 빌드 및 푸시
+      # ------------------------------
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+
+# ============================================
+# AWS ECR 로그인 예제
+# ============================================
+#     - name: Login to AWS ECR
+#       uses: aws-actions/amazon-ecr-login@v2
+#       with:
+#         registry-type: private
+#       env:
+#         AWS_REGION: ${{ secrets.AWS_REGION }}
+#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+
+# ============================================
+# GitHub Container Registry 로그인 예제
+# ============================================
+#     - name: Login to GitHub Container Registry
+#       uses: docker/login-action@v3
+#       with:
+#         registry: ghcr.io
+#         username: ${{ github.actor }}
+#         password: ${{ secrets.GITHUB_TOKEN }}
+
+
+# ============================================
+# 단일 아키텍처 빌드 (빠른 빌드)
+# ============================================
+#     - name: Build and push (single arch)
+#       uses: docker/build-push-action@v5
+#       with:
+#         context: .
+#         push: true
+#         tags: ${{ steps.meta.outputs.tags }}
+#         cache-from: type=gha
+#         cache-to: type=gha,mode=max
+
+
+# ============================================
+# 시크릿을 사용한 빌드 예제
+# ============================================
+#     - name: Build with secrets
+#       uses: docker/build-push-action@v5
+#       with:
+#         context: .
+#         push: true
+#         tags: ${{ steps.meta.outputs.tags }}
+#         secrets: |
+#           pip_conf=${{ secrets.PIP_CONF }}
+
+
+# ============================================
+# 빌드 매트릭스 (여러 이미지 동시 빌드)
+# ============================================
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         include:
+#           - dockerfile: Dockerfile.web
+#             image: myapp-web
+#           - dockerfile: Dockerfile.worker
+#             image: myapp-worker
+#     steps:
+#       - name: Build and push
+#         uses: docker/build-push-action@v5
+#         with:
+#           context: .
+#           file: ${{ matrix.dockerfile }}
+#           push: true
+#           tags: myregistry.com/${{ matrix.image }}:${{ github.sha }}
+
+
+# ============================================
+# 배포 잡 (빌드 후 실행)
+# ============================================
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
+#     if: github.ref == 'refs/heads/main'
+#     steps:
+#       - name: Deploy to server
+#         uses: appleboy/ssh-action@v1
+#         with:
+#           host: ${{ secrets.SERVER_HOST }}
+#           username: ${{ secrets.SERVER_USER }}
+#           key: ${{ secrets.SERVER_SSH_KEY }}
+#           script: |
+#             docker pull myregistry.com/myapp:latest
+#             docker-compose up -d
