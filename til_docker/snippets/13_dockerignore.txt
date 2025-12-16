@@ -1,0 +1,169 @@
+# ============================================
+# .dockerignore 템플릿
+# 빌드 컨텍스트 크기 40-70% 감소
+# ============================================
+# 이 파일을 프로젝트 루트의 .dockerignore로 복사하여 사용
+
+
+# ------------------------------
+# 버전 관리
+# ------------------------------
+.git
+.gitignore
+.github
+.gitattributes
+
+
+# ------------------------------
+# Python
+# ------------------------------
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache
+.coverage
+htmlcov
+*.egg-info
+dist
+build
+*.egg
+.mypy_cache
+.ruff_cache
+.tox
+.nox
+
+
+# ------------------------------
+# 가상환경
+# ------------------------------
+.venv
+venv
+env
+ENV
+.env.local
+.env.development
+.env.test
+
+
+# ------------------------------
+# 환경 설정 (시크릿)
+# ------------------------------
+.env
+.env.*
+.envs/
+*.env.local
+secrets/
+*.pem
+*.key
+
+
+# ------------------------------
+# IDE 및 에디터
+# ------------------------------
+.vscode
+.idea
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.project
+.pydevproject
+.settings
+
+
+# ------------------------------
+# 로그 및 임시 파일
+# ------------------------------
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+
+
+# ------------------------------
+# 데이터 파일
+# ------------------------------
+data/
+*.db
+*.sqlite3
+*.csv
+*.json.bak
+
+
+# ------------------------------
+# 문서
+# ------------------------------
+*.md
+!README.md
+docs/
+CHANGELOG*
+CONTRIBUTING*
+LICENSE*
+
+
+# ------------------------------
+# 테스트
+# ------------------------------
+tests/
+test/
+*_test.py
+test_*.py
+conftest.py
+pytest.ini
+.coveragerc
+
+
+# ------------------------------
+# OS 관련
+# ------------------------------
+.DS_Store
+Thumbs.db
+*.DS_Store
+ehthumbs.db
+Desktop.ini
+
+
+# ------------------------------
+# Docker 관련 (빌드에 불필요)
+# ------------------------------
+Dockerfile*
+docker-compose*.yml
+docker-bake.hcl
+.dockerignore
+
+
+# ------------------------------
+# CI/CD
+# ------------------------------
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+.circleci/
+
+
+# ------------------------------
+# 기타
+# ------------------------------
+Makefile
+*.sh
+!entrypoint.sh
+scripts/
+node_modules/
+.npm
+.yarn
+package-lock.json
+yarn.lock
+
+
+# ============================================
+# 효과 확인 명령어
+# ============================================
+# docker build . -t test --no-cache
+#
+# 적용 전: Sending build context to Docker daemon  150MB
+# 적용 후: Sending build context to Docker daemon  45MB
