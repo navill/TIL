@@ -1,0 +1,78 @@
+{
+  "_comment": "AWS ECR 수명 주기 정책 - 오래된 이미지 자동 정리로 비용 절감",
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "프로덕션 이미지 최근 10개만 유지",
+      "selection": {
+        "tagStatus": "tagged",
+        "tagPrefixList": ["prod"],
+        "countType": "imageCountMoreThan",
+        "countNumber": 10
+      },
+      "action": {
+        "type": "expire"
+      }
+    },
+    {
+      "rulePriority": 2,
+      "description": "개발 이미지 7일 후 삭제",
+      "selection": {
+        "tagStatus": "tagged",
+        "tagPrefixList": ["dev"],
+        "countType": "sinceImagePushed",
+        "countUnit": "days",
+        "countNumber": 7
+      },
+      "action": {
+        "type": "expire"
+      }
+    },
+    {
+      "rulePriority": 3,
+      "description": "스테이징 이미지 14일 후 삭제",
+      "selection": {
+        "tagStatus": "tagged",
+        "tagPrefixList": ["staging"],
+        "countType": "sinceImagePushed",
+        "countUnit": "days",
+        "countNumber": 14
+      },
+      "action": {
+        "type": "expire"
+      }
+    },
+    {
+      "rulePriority": 4,
+      "description": "태그 없는 이미지 1일 후 삭제",
+      "selection": {
+        "tagStatus": "untagged",
+        "countType": "sinceImagePushed",
+        "countUnit": "days",
+        "countNumber": 1
+      },
+      "action": {
+        "type": "expire"
+      }
+    },
+    {
+      "rulePriority": 5,
+      "description": "feature 브랜치 이미지 3일 후 삭제",
+      "selection": {
+        "tagStatus": "tagged",
+        "tagPrefixList": ["feature"],
+        "countType": "sinceImagePushed",
+        "countUnit": "days",
+        "countNumber": 3
+      },
+      "action": {
+        "type": "expire"
+      }
+    }
+  ],
+  "_usage": {
+    "적용_명령어": "aws ecr put-lifecycle-policy --repository-name myapp --lifecycle-policy-text file://ecr_lifecycle_policy.json",
+    "확인_명령어": "aws ecr get-lifecycle-policy --repository-name myapp",
+    "삭제_명령어": "aws ecr delete-lifecycle-policy --repository-name myapp"
+  }
+}

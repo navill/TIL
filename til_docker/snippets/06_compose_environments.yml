@@ -1,0 +1,137 @@
+# ============================================
+# Docker Compose 환경별 설정 템플릿
+# 베이스, 개발, 프로덕션 환경 분리
+# ============================================
+
+
+# ============================================
+# docker-compose.yml (베이스 설정)
+# ============================================
+# version: '3.8'
+#
+# services:
+#   web:
+#     build: .
+#     environment:
+#       - APP_ENV=${APP_ENV:-production}
+#
+#   db:
+#     image: postgres:15-alpine
+#     environment:
+#       POSTGRES_USER: ${DB_USER}
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+
+# ============================================
+# docker-compose.dev.yml (개발 환경)
+# 볼륨 마운트로 핫 리로드, 디버거 포트 노출
+# ============================================
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app:cached              # 코드 핫 리로드
+      - /app/.venv                 # 가상환경은 컨테이너 내 유지
+    environment:
+      - DEBUG=true
+      - APP_ENV=development
+    ports:
+      - "8000:8000"
+      - "5678:5678"                # 디버거 포트
+
+  db:
+    ports:
+      - "5432:5432"                # 로컬 접근 허용
+
+# 사용법: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+
+
+# ============================================
+# docker-compose.prod.yml (프로덕션 환경)
+# 이미지 기반, 리소스 제한, 로깅 설정
+# ============================================
+# version: '3.8'
+#
+# services:
+#   web:
+#     image: myregistry.com/myapp:${VERSION}
+#     restart: always
+#     deploy:
+#       replicas: 3
+#       resources:
+#         limits:
+#           cpus: '2'
+#           memory: 2G
+#         reservations:
+#           cpus: '1'
+#           memory: 1G
+#
+#   db:
+#     volumes:
+#       - /data/postgres:/var/lib/postgresql/data
+#     logging:
+#       driver: "json-file"
+#       options:
+#         max-size: "10m"
+#         max-file: "3"
+
+# 사용법: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+
+# ============================================
+# Compose Profiles (선택적 서비스 실행)
+# ============================================
+# version: '3.8'
+#
+# services:
+#   # 항상 실행
+#   web:
+#     image: myapp:latest
+#     ports:
+#       - "8000:8000"
+#
+#   db:
+#     image: postgres:15-alpine
+#
+#   # 개발 시에만 실행
+#   debug:
+#     image: myapp:dev
+#     profiles: ["dev"]
+#     ports:
+#       - "5678:5678"
+#
+#   # 테스트 시에만 실행
+#   test-runner:
+#     image: myapp:test
+#     profiles: ["test"]
+#     command: pytest
+#
+#   # 모니터링 (선택적)
+#   prometheus:
+#     image: prom/prometheus
+#     profiles: ["monitoring"]
+#     ports:
+#       - "9090:9090"
+#
+#   grafana:
+#     image: grafana/grafana
+#     profiles: ["monitoring"]
+#     ports:
+#       - "3000:3000"
+
+# 프로필 사용법:
+# docker-compose up -d                              # 기본 서비스만
+# docker-compose --profile dev up -d                # 개발 프로필 포함
+# docker-compose --profile dev --profile monitoring up -d  # 여러 프로필
+# COMPOSE_PROFILES=dev,monitoring docker-compose up -d     # 환경변수
+
+
+# ============================================
+# 환경변수 파일 사용
+# ============================================
+# docker-compose --env-file .env.dev up -d
+# docker-compose --env-file .env.prod up -d

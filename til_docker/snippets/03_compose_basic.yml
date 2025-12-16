@@ -1,0 +1,135 @@
+# ============================================
+# Docker Compose 기본 템플릿
+# 웹 + DB + Redis 구성 예제
+# ============================================
+
+version: '3.8'
+
+services:
+  # ------------------------------
+  # 웹 서비스
+  # ------------------------------
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:pass@db:5432/mydb
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ./app:/app          # 개발 시 코드 핫 리로드
+    networks:
+      - backend
+    restart: unless-stopped
+
+  # ------------------------------
+  # 데이터베이스
+  # ------------------------------
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mydb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    restart: unless-stopped
+
+  # ------------------------------
+  # 캐시
+  # ------------------------------
+  redis:
+    image: redis:7-alpine
+    networks:
+      - backend
+    restart: unless-stopped
+
+# ------------------------------
+# 네트워크 정의
+# ------------------------------
+networks:
+  backend:
+    driver: bridge
+
+# ------------------------------
+# 볼륨 정의
+# ------------------------------
+volumes:
+  postgres_data:
+
+
+# ============================================
+# 의존성 관리 (헬스체크 포함)
+# service_healthy 조건으로 안전한 시작 순서 보장
+# ============================================
+# services:
+#   web:
+#     image: myapp:latest
+#     depends_on:
+#       db:
+#         condition: service_healthy      # DB 헬스체크 통과 후 시작
+#       redis:
+#         condition: service_started      # Redis 시작 후 시작
+#     restart: unless-stopped
+#
+#   db:
+#     image: postgres:15-alpine
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+#       start_period: 30s
+
+
+# ============================================
+# 헬스체크 및 재시작 정책
+# ============================================
+# services:
+#   web:
+#     image: myapp:latest
+#     restart: unless-stopped             # 수동 중지 전까지 재시작
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#       start_period: 40s
+#
+# 재시작 정책:
+#   - no: 재시작 안 함 (기본값)
+#   - always: 항상 재시작
+#   - on-failure: 오류 시에만 재시작
+#   - on-failure:5: 최대 5회까지 재시작
+#   - unless-stopped: 수동 중지 전까지 재시작
+
+
+# ============================================
+# 시크릿 및 설정 관리
+# ============================================
+# services:
+#   web:
+#     image: myapp:latest
+#     secrets:
+#       - db_password
+#       - api_key
+#     configs:
+#       - source: app_config
+#         target: /app/config.yml
+#
+# secrets:
+#   db_password:
+#     file: ./secrets/db_password.txt
+#   api_key:
+#     external: true                      # Docker Swarm secret
+#
+# configs:
+#   app_config:
+#     file: ./config/app.yml
