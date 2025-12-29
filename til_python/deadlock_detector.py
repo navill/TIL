@@ -189,11 +189,11 @@ class DeadlockDetector:
             self.stack_history[thread.thread_id].append(thread.stack_hash)
 
             # 최근 threshold 개의 해시가 모두 동일하면 데드락 의심
+            # deque(maxlen=threshold)이므로 전체가 곧 최근 N개
             history = self.stack_history[thread.thread_id]
             if len(history) >= self.threshold:
-                recent = history[-self.threshold:]
-
-                if len(set(recent)) == 1 and thread.is_blocked():
+                # deque는 슬라이싱 미지원 → 전체 사용 (maxlen으로 이미 제한됨)
+                if len(set(history)) == 1 and thread.is_blocked():
                     result["suspected_threads"].append({
                         "thread_id": thread.thread_id,
                         "thread_name": thread.thread_name,
